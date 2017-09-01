@@ -767,7 +767,7 @@ def main():
     # gfilelist = glob.glob("/Users/jselsing/Dropbox/SN2017eaw_PHOT/ALFOSC/*g0*.fits")
     # rfilelist = glob.glob("/Users/jselsing/Dropbox/SN2017eaw_PHOT/ALFOSC/*r0*.fits")
     # ifilelist = glob.glob("/Users/jselsing/Dropbox/SN2017eaw_PHOT/ALFOSC/*i0*.fits")
-    filelist = glob.glob("/Users/jselsing/Dropbox/SN2017eaw_PHOT/REDUCED_PHOT/*.fits")
+    filelist = glob.glob("/Users/user/Dropbox/SN2017eaw_PHOT/REDUCED_PHOT/*.fits")
     # filelist = gfilelist + rfilelist + ifilelist + zfilelist
     # print(filelist)
     # exit()
