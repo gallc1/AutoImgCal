@@ -416,14 +416,13 @@ def run_astrometry_net(img_name, img_ra, img_dec):
       logger.warn("astrometry-net failed to be executed.", exc_info=1)
 
     # Read in the calibrated image
-    calib_img_name = img_name.replace("temp", "new")
     try:
         calib_img_name = img_name.replace("temp", "new")
         calib_img = fits.open(calib_img_name)
         img_name = calib_img_name
     except (OSError, IOError):
         # logger.warn("Astrometry solution did not solve! Continuing without astrometric calibration.", exc_info=1)
-        logger.warn("Astrometry solution did not solve! Continuing without astrometric calibration.")
+        logger.warn("Astrometry solution did not solve! Continuing without astrometric calibration.", exc_info=1)
 
     return img_name
 
@@ -438,7 +437,7 @@ def joint_catalog(cat_1, cat_2):
 
     # Find mapping indices
     idx_map_cat2, idx_map_cat1 = [], []
-    tol = 1e-3 # Distance in degrees - This could change depending on the accuracy of the astrometric solution
+    tol = 1e-2 # Distance in degrees - This could change depending on the accuracy of the astrometric solution
     for ii, kk in enumerate(cat_2):
         # find the k nearest neighbours
         distance, indice = tree.query(kk[0:2], k=1)
@@ -603,7 +602,8 @@ def autocal(filename = "../test_data/FORS_R_OB_ana.fits", catalog = "SDSS", sigc
 
     # Filter away 5-sigma outliers in the zero point
     zp = cat_mag - mag
-    # print(zp)
+    print (zp)
+    print (mag), 'hugo'
     zp_l, zp_m, zp_h = np.percentile(zp, [16, 50, 84])
 
     sig_l = zp_m - zp_l
@@ -763,16 +763,17 @@ def autocal(filename = "../test_data/FORS_R_OB_ana.fits", catalog = "SDSS", sigc
 def main():
 
 
+    # gfilelist = glob.glob("/Users/christagall/Dropbox/SHAREDFOLDERS/SN2017eaw_PHOT/ALFOSC/*g0*.fits")
+    # rfilelist = glob.glob("/Users/christagall/Dropbox/SHAREDFOLDERS/SN2017eaw_PHOT/ALFOSC/*r0*.fits")
+    # ifilelist = glob.glob("/Users/christagall/Dropbox/SHAREDFOLDERS/SN2017eaw_PHOT/ALFOSC/*i0*.fits")
+    # zfilelist = glob.glob("/Users/christagall/Dropbox/SHAREDFOLDERS/SN2017eaw_PHOT/ALFOSC/*z0*.fits")
+    # filelist = glob.glob("../test_data/FORS_R_OB_ana.fits")
+    Hfilelist = glob.glob("/Users/christagall/Dropbox/PROJECT_SN2017eaw/DATA/PHOTO/NOTCAM/H_test/*H.fits")
 
-    # gfilelist = glob.glob("/Users/jselsing/Dropbox/SN2017eaw_PHOT/ALFOSC/*g0*.fits")
-    # rfilelist = glob.glob("/Users/jselsing/Dropbox/SN2017eaw_PHOT/ALFOSC/*r0*.fits")
-    # ifilelist = glob.glob("/Users/jselsing/Dropbox/SN2017eaw_PHOT/ALFOSC/*i0*.fits")
-    filelist = glob.glob("/Users/user/Dropbox/SN2017eaw_PHOT/REDUCED_PHOT/*.fits")
-    # filelist = gfilelist + rfilelist + ifilelist + zfilelist
-    # print(filelist)
-    # exit()
+    filelist = Hfilelist #+ rfilelist + ifilelist + zfilelist
+
     for ii in filelist:
-      autocal(filename = ii, catalog = "2MASS", sigclip = 50, objlim = 75, cosmic_rejection = False, astrometry = True)
+      autocal(filename = ii, catalog = "2MASS", sigclip = 50, objlim = 75, cosmic_rejection = True, astrometry = False)
 
 
 if __name__ == '__main__':
